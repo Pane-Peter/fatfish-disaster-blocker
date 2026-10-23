@@ -15,7 +15,7 @@ A Chrome extension that locally hides low-level Bilibili comments and filters co
 
 - Hide Bilibili comments and replies whose recognized user level is below level 3.
 - Match keywords against usernames and comment text, then hide the matching item.
-- Toggle all filtering, level filtering, and keyword filtering separately in the extension popup.
+- Toggle all filtering, the Bilibili level rule, the Xiaoheihe no-level rule, and keyword filtering separately in the popup.
 - Edit the keyword list in the popup. Separate terms with commas or new lines.
 - Support Bilibili's newer Shadow DOM comment components and some legacy comment layouts.
 - Support comments and replies on Xiaoheihe post pages. A separate toggle hides items with no level badge; comments with a badge such as `LV8` or the author badge remain visible.
