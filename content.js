@@ -201,7 +201,7 @@
     const levelScopes = [usernameNode?.parentElement, usernameNode?.parentElement?.parentElement].filter(Boolean);
     const levelElements = new Set();
     for (const scope of levelScopes) {
-      scope.querySelectorAll?.("[class*='level'], [class*='Level'], [class*='lv'], [class*='Lv'], [class*='等级'], [aria-label*='LV'], [title*='LV'], span, i, b, em, small, img")
+      scope.querySelectorAll?.("[class*='level'], [class*='Level'], [class*='lv'], [class*='Lv'], [class*='等级'], [class*='author'], [class*='Author'], [class*='作者'], [class*='badge'], [class*='Badge'], [aria-label*='LV'], [title*='LV'], span, i, b, em, small, img")
         .forEach(element => levelElements.add(element));
     }
     const hasLevelBadge = [...levelElements].some(element => {
