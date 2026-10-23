@@ -8,10 +8,8 @@
 
 ## Contributors（贡献者）
 
-- [Pane-Peter](https://github.com/Pane-Peter)（项目维护者）
-- OpenAI Codex（AI 协助代码实现、调试与文档编写）
-
-[查看 GitHub Contributors 页面](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
+- [Pane-Peter](https://github.com/Pane-Peter)
+- OpenAI Codex
 
 ## 功能
 
@@ -94,10 +92,6 @@
 4. 刷新已打开的 Bilibili 视频页面。
 
 升级时扩展会把新版默认关键词并入已有关键词一次，并保留此前自定义的词。之后你在弹窗删掉的词不会在每次启动时自动加回来。
-
-### 从 Chrome Web Store 发布
-
-本项目目前以未打包扩展源码形式提供。维护者可按 Chrome Web Store Developer Dashboard 的当前流程创建开发者账号、上传扩展 ZIP、填写商店资料并提交审核。审核通过后，用户可通过商店安装和接收更新。商店政策和发布要求可能变化，请以 Dashboard 的提示为准。
 
 ## 本地开发
 
