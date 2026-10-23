@@ -20,7 +20,7 @@ A Chrome extension that locally hides low-level Bilibili comments and filters co
 - Toggle all filtering, level filtering, and keyword filtering separately in the extension popup.
 - Edit the keyword list in the popup. Separate terms with commas or new lines.
 - Support Bilibili's newer Shadow DOM comment components and some legacy comment layouts.
-- Support comments and replies on Xiaoheihe post pages. A separate toggle hides items with no level badge; comments with a badge such as `LV8` remain visible.
+- Support comments and replies on Xiaoheihe post pages. A separate toggle hides items with no level badge; comments with a badge such as `LV8` or the author badge remain visible.
 - Show filtering status, number of checked comments, and number hidden in a page indicator.
 - Save settings using Chrome Sync Storage.
 
@@ -29,7 +29,7 @@ A Chrome extension that locally hides low-level Bilibili comments and filters co
 Filters are enabled by default:
 
 1. **Bilibili level filter:** hides comments with a recognized user level below 3. A comment is not hidden by this rule when its level cannot be identified.
-2. **Xiaoheihe no-level filter:** enabled by default. Hides comments or replies with no level badge. Items with badges such as `LV8` remain visible. Toggle this rule separately in the popup.
+2. **Xiaoheihe no-level filter:** enabled by default. Hides comments or replies with no level badge. Items with badges such as `LV8` or the author badge remain visible. Toggle this rule separately in the popup.
 3. **Keyword filter:** hides a comment on Bilibili or Xiaoheihe when its username or text contains any configured keyword.
 
 Default keywords:
@@ -81,7 +81,7 @@ Select the **Fish Disaster Blocker** toolbar icon to open the popup:
 
 - **Enable filtering:** pause or resume all filtering.
 - **Hide levels below 3:** toggle the Bilibili level rule.
-- **Hide Xiaoheihe comments without a level badge:** toggle the Xiaoheihe no-level rule. Items with a badge such as `LV8` remain visible.
+- **Hide Xiaoheihe comments without a level badge:** toggle the Xiaoheihe no-level rule. Items with a badge such as `LV8` or the author badge remain visible.
 - **Match comment/reply text and usernames:** toggle keyword filtering on Bilibili and Xiaoheihe.
 - **Keywords:** edit the terms to match. Changes are saved automatically.
 

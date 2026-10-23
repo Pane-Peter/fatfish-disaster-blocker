@@ -206,7 +206,7 @@
     }
     const hasLevelBadge = [...levelElements].some(element => {
       const label = `${textOf(element)} ${element.getAttribute("aria-label") || ""} ${element.getAttribute("title") || ""} ${element.getAttribute("alt") || ""} ${element.getAttribute("class") || ""}`;
-      return /\b(?:lv\.?\s*\d+|level\s*\d+|\d+\s*级)\b/i.test(label);
+      return /\b(?:lv\.?\s*\d+|level\s*\d+|\d+\s*级)\b/i.test(label) || /作者/.test(label);
     });
     const noLevelHit = settings.xhhNoLevel && Boolean(usernameNode) && !hasLevelBadge;
     const reason = settings.enabled && (keywordHit || noLevelHit)
