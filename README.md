@@ -52,7 +52,21 @@
 `.crx` 是 Chrome 的打包扩展格式。能否直接从本地安装取决于操作系统和浏览器管理策略：
 
 - **Windows/macOS 个人版 Chrome：** 不支持直接安装本地 `.crx` 文件。请使用上面的“加载已解压的扩展程序”方式；日常分发则需要先发布到 Chrome Web Store，再从商店页面点击**添加至 Chrome**。
-- **Linux：** Chrome 支持管理员通过外部扩展配置安装本地 `.crx`。这需要系统管理员配置扩展 ID、版本号及 CRX 文件路径，普通用户通常不能仅靠双击文件完成安装。可参考 [Chrome 官方 Linux 本地扩展安装说明](https://developer.chrome.com/docs/extensions/how-to/distribute/host-on-linux)。
+- **Linux：** Chrome 支持管理员通过外部扩展配置安装本地 `.crx`，步骤如下：
+  1. 打包扩展为 `.crx`，记下扩展 ID 和 `manifest.json` 中的版本号。
+  2. 将 `.crx` 放到固定路径，例如 `/opt/google/chrome/extensions/fish-disaster-blocker.crx`。
+  3. 以管理员权限，在 `/opt/google/chrome/extensions/`（或 `/usr/share/google-chrome/extensions/`）新建名为 `<扩展ID>.json` 的文件，内容如下，并将路径、版本号替换成实际值：
+
+     ```json
+     {
+       "external_crx": "/opt/google/chrome/extensions/fish-disaster-blocker.crx",
+       "external_version": "2.2.0"
+     }
+     ```
+
+  4. 重启 Chrome，在 `chrome://extensions` 确认扩展已安装。
+
+  这种方式需要系统管理员权限；`.json` 文件名中的扩展 ID 必须与 `.crx` 包中的 ID 一致。详见 [Chrome 官方 Linux 本地扩展安装说明](https://developer.chrome.com/docs/extensions/how-to/distribute/host-on-linux)。
 - **受企业策略管理的设备：** 请联系管理员通过 Chrome 企业策略部署扩展。
 
 如果你在 Windows 上拿到的是 `.crx`，可将其解压为扩展目录，再回到 `chrome://extensions` 使用开发者模式的**加载已解压的扩展程序**。GitHub Release 的 ZIP 也需要先解压，不能直接导入 Chrome。Chrome 的安装限制详见[官方分发说明](https://developer.chrome.com/docs/extensions/how-to/distribute)。
