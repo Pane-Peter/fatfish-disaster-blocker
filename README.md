@@ -47,13 +47,15 @@
 5. 选择解压后的项目根目录，也就是包含 `manifest.json` 的文件夹。
 6. 打开或刷新 Bilibili 视频/番剧页面；扩展匹配 `www.bilibili.com/video/*` 和 `www.bilibili.com/bangumi/*`。
 
-### 方式二：通过 Chrome Web Store 安装（正式发布后）
+### 方式二：从本地 CRX 安装（按系统区分）
 
-1. 维护者将扩展源码 ZIP 上传到 Chrome Web Store Developer Dashboard，并完成商店审核和发布。
-2. 打开扩展在 Chrome Web Store 的页面。
-3. 点击**添加至 Chrome**，并按提示确认安装。
+`.crx` 是 Chrome 的打包扩展格式。能否直接从本地安装取决于操作系统和浏览器管理策略：
 
-GitHub Release 上的 ZIP 是源码/分发压缩包，不能直接导入 Chrome。普通 Windows 和 macOS 版 Chrome 也不允许直接安装本地 `.crx` 文件；要给这些平台的用户提供日常安装渠道，应通过 Chrome Web Store 发布。`.crx` 本地安装仅适用于 Linux 的特定安装方式或受企业策略管理的环境。个人开发和测试请使用上面的“加载已解压的扩展程序”方式。详见 [Chrome 扩展分发说明](https://developer.chrome.com/docs/extensions/how-to/distribute)。
+- **Windows/macOS 个人版 Chrome：** 不支持直接安装本地 `.crx` 文件。请使用上面的“加载已解压的扩展程序”方式；日常分发则需要先发布到 Chrome Web Store，再从商店页面点击**添加至 Chrome**。
+- **Linux：** Chrome 支持管理员通过外部扩展配置安装本地 `.crx`。这需要系统管理员配置扩展 ID、版本号及 CRX 文件路径，普通用户通常不能仅靠双击文件完成安装。可参考 [Chrome 官方 Linux 本地扩展安装说明](https://developer.chrome.com/docs/extensions/how-to/distribute/host-on-linux)。
+- **受企业策略管理的设备：** 请联系管理员通过 Chrome 企业策略部署扩展。
+
+如果你在 Windows 上拿到的是 `.crx`，可将其解压为扩展目录，再回到 `chrome://extensions` 使用开发者模式的**加载已解压的扩展程序**。GitHub Release 的 ZIP 也需要先解压，不能直接导入 Chrome。Chrome 的安装限制详见[官方分发说明](https://developer.chrome.com/docs/extensions/how-to/distribute)。
 
 ### 设置过滤规则
 
