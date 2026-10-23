@@ -6,10 +6,8 @@
 
 ## Contributors（贡献者）
 
-- [Pane-Peter](https://github.com/Pane-Peter)（项目维护者）
-- OpenAI Codex（AI 协助代码实现、调试与文档编写）
-
-[查看 GitHub Contributors 页面](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
+- [Pane-Peter](https://github.com/Pane-Peter)
+- OpenAI Codex
 
 ## 功能
 
