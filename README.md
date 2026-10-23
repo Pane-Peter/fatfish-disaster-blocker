@@ -4,10 +4,12 @@
 
 > 过滤只影响你自己的页面显示，不会删除评论、屏蔽账号、提交举报或修改 B 站数据。
 
-## 作者
+## Contributors（贡献者）
 
-- Pane-Peter
-- OpenAI Codex（代码与文档协作）
+- [Pane-Peter](https://github.com/Pane-Peter)（项目维护者）
+- OpenAI Codex（AI 协助代码实现、调试与文档编写）
+
+[查看 GitHub Contributors 页面](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
 
 ## 功能
 
@@ -45,14 +47,14 @@
 5. 选择解压后的项目根目录，也就是包含 `manifest.json` 的文件夹。
 6. 打开或刷新 Bilibili 视频/番剧页面；扩展匹配 `www.bilibili.com/video/*` 和 `www.bilibili.com/bangumi/*`。
 
-### 方式二：使用 Release ZIP
+### 方式二：使用打包 ZIP
 
-1. 从仓库 Releases 下载 `fatfish-disaster-blocker-v2.2.0.zip`。
+1. 从仓库的 [`dist/`](dist/) 目录下载 [`fatfish-disaster-blocker-v2.2.0.zip`](dist/fatfish-disaster-blocker-v2.2.0.zip)。
 2. 将 ZIP 解压到一个固定目录。
 3. 在 Chrome 打开 `chrome://extensions`，打开开发者模式。
 4. 点击**加载已解压的扩展程序**，选择 ZIP 解压后包含 `manifest.json` 的文件夹。
 
-Chrome 的“加载已解压的扩展程序”需要文件夹，不能直接选择 ZIP。解压后的文件夹不要删除或移动，否则扩展会失效。
+Chrome 的“加载已解压的扩展程序”需要文件夹，不能直接选择 ZIP。解压后的文件夹不要删除或移动，否则扩展会失效。打包文件与源码版本一致，当前扩展版本为 2.2.0。
 
 ### 设置过滤规则
 
