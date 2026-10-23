@@ -6,8 +6,10 @@
 
 ## Contributors（贡献者）
 
-- [Pane-Peter](https://github.com/Pane-Peter)
-- OpenAI Codex
+- [Pane-Peter](https://github.com/Pane-Peter)（项目维护者）
+- OpenAI Codex（AI 协助代码实现、调试与文档编写）
+
+[查看 GitHub Contributors 页面](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
 
 ## 功能
 
@@ -45,14 +47,13 @@
 5. 选择解压后的项目根目录，也就是包含 `manifest.json` 的文件夹。
 6. 打开或刷新 Bilibili 视频/番剧页面；扩展匹配 `www.bilibili.com/video/*` 和 `www.bilibili.com/bangumi/*`。
 
-### 方式二：使用打包 ZIP
+### 方式二：通过 Chrome Web Store 安装（正式发布后）
 
-1. 从仓库的 [`dist/`](dist/) 目录下载 [`fatfish-disaster-blocker-v2.2.0.zip`](dist/fatfish-disaster-blocker-v2.2.0.zip)。
-2. 将 ZIP 解压到一个固定目录。
-3. 在 Chrome 打开 `chrome://extensions`，打开开发者模式。
-4. 点击**加载已解压的扩展程序**，选择 ZIP 解压后包含 `manifest.json` 的文件夹。
+1. 维护者将扩展源码 ZIP 上传到 Chrome Web Store Developer Dashboard，并完成商店审核和发布。
+2. 打开扩展在 Chrome Web Store 的页面。
+3. 点击**添加至 Chrome**，并按提示确认安装。
 
-Chrome 的“加载已解压的扩展程序”需要文件夹，不能直接选择 ZIP。解压后的文件夹不要删除或移动，否则扩展会失效。打包文件与源码版本一致，当前扩展版本为 2.2.0。
+GitHub Release 上的 ZIP 是源码/分发压缩包，不能直接导入 Chrome。普通 Windows 和 macOS 版 Chrome 也不允许直接安装本地 `.crx` 文件；要给这些平台的用户提供日常安装渠道，应通过 Chrome Web Store 发布。`.crx` 本地安装仅适用于 Linux 的特定安装方式或受企业策略管理的环境。个人开发和测试请使用上面的“加载已解压的扩展程序”方式。详见 [Chrome 扩展分发说明](https://developer.chrome.com/docs/extensions/how-to/distribute)。
 
 ### 设置过滤规则
 
