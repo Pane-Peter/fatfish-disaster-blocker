@@ -89,7 +89,7 @@ Then build and run the generated macOS app in Xcode and enable the extension in 
      ```json
      {
        "external_crx": "/opt/google/chrome/extensions/fish-disaster-blocker.crx",
-       "external_version": "2.3.0"
+       "external_version": "2.3.1"
      }
      ```
 

@@ -89,7 +89,7 @@ xcrun safari-web-extension-packager /path/to/fatfish-disaster-blocker \
      ```json
      {
        "external_crx": "/opt/google/chrome/extensions/fish-disaster-blocker.crx",
-       "external_version": "2.3.0"
+       "external_version": "2.3.1"
      }
      ```
 

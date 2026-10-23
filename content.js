@@ -95,14 +95,42 @@
   }
 
   function rendererLevel(renderer, body) {
-    const payloadLevel = readPayload(renderer).level;
+    const candidates = [];
+    const scopes = [body];
+    const seen = new Set();
+    const visitRenderer = host => {
+      if (!host || seen.has(host)) return;
+      seen.add(host);
+      candidates.push(host);
+      if (!host.shadowRoot) return;
+      scopes.push(host.shadowRoot);
+      host.shadowRoot.querySelectorAll?.("bili-comment-thread-renderer, bili-comment-renderer, bili-comment-reply-renderer, bili-comment-user-info")
+        .forEach(visitRenderer);
+    };
+    visitRenderer(renderer);
+
+    let payloadLevel = null;
+    for (const candidate of candidates) {
+      const data = candidate.__data;
+      const possibleLevels = [
+        data?.member?.level_info?.current_level,
+        data?.member?.levelInfo?.currentLevel,
+        data?.member?.current_level,
+        data?.member?.level,
+      ];
+      for (const value of possibleLevels) {
+        const parsed = typeof value === "number" || /^\d+$/.test(String(value ?? "").trim())
+          ? Number(value) : NaN;
+        if (Number.isInteger(parsed) && parsed >= 0 && parsed <= 6) {
+          payloadLevel = parsed;
+          break;
+        }
+      }
+      if (payloadLevel !== null) break;
+    }
     if (payloadLevel !== null && payloadLevel >= 0 && payloadLevel <= 6) return payloadLevel;
 
-    const scopes = [body];
-    // The current user-info component owns its own open shadow root and displays #user-level.
-    body.querySelectorAll?.("bili-comment-user-info").forEach(info => {
-      if (info.shadowRoot) scopes.push(info.shadowRoot);
-    });
+    // Search only the comment's open shadow roots, including nested user-info components.
     for (const scope of scopes) {
       for (const badge of scope.querySelectorAll?.(`${LEVEL_BADGES}, #user-level`) || []) {
         const className = typeof badge.className === "string" ? badge.className : "";
