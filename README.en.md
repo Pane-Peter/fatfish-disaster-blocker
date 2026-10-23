@@ -11,8 +11,6 @@ A Chrome extension that locally hides low-level Bilibili comments and filters co
 - [Pane-Peter](https://github.com/Pane-Peter) — project maintainer
 - OpenAI Codex — AI-assisted implementation, debugging, and documentation
 
-[View the GitHub contributors graph](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
-
 ## Features
 
 - Hide Bilibili comments and replies whose recognized user level is below level 3.
@@ -96,8 +94,6 @@ On the first update after a default-keyword list change, new defaults are merged
 ## Development and deployment
 
 This is a Chrome Manifest V3 extension with no build step or third-party runtime dependencies. After editing `content.js`, `content.css`, or popup files, reload the extension at `chrome://extensions` and refresh the Bilibili or Xiaoheihe page.
-
-For general users on Windows and macOS, the supported distribution path is the Chrome Web Store: upload the extension package through the Chrome Web Store Developer Dashboard, complete review, and install it from its store listing. See [Chrome's distribution guide](https://developer.chrome.com/docs/extensions/how-to/distribute). Local `.crx` installation is limited to Linux or enterprise-managed environments as described above.
 
 Project layout:
 
