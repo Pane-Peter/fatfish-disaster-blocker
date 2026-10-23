@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+body { margin: 0; width: 320px; color: #25262b; background: #fff; font: 14px/1.5 system-ui, "Microsoft YaHei", sans-serif; }
+main { padding: 16px; }
+h1 { margin: 0 0 14px; font-size: 17px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #eee; }
+.master { font-weight: 650; }
+input[type=checkbox] { width: 17px; height: 17px; accent-color: #00a1d6; }
+.terms { display: block; padding-top: 12px; font-weight: 600; }
+textarea { display: block; width: 100%; resize: vertical; margin-top: 6px; padding: 8px; border: 1px solid #d9dce2; border-radius: 6px; font: inherit; }
+.hint { margin: 12px 0 4px; color: #747985; font-size: 12px; }
+#status { min-height: 18px; color: #00a1d6; font-size: 12px; }

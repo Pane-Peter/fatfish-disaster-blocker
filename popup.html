@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>鱼灾屏蔽助手</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <main>
+    <h1>鱼灾屏蔽助手</h1>
+    <label class="row master"><span>启用过滤</span><input id="enabled" type="checkbox"></label>
+    <label class="row"><span>隐藏等级低于 3 级</span><input id="lowLevel" type="checkbox"></label>
+    <label class="row"><span>匹配回复内容和用户名</span><input id="keywords" type="checkbox"></label>
+    <label class="terms">关键词（用逗号分隔）<textarea id="terms" rows="2" spellcheck="false"></textarea></label>
+    <p class="hint">评论卡片会在本地页面中隐藏，不会屏蔽用户或修改 B 站数据。等级未能识别的评论不会按等级过滤。</p>
+    <div id="status" role="status"></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
