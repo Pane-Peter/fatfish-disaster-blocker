@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | [English](README.en.md)
 
-一款用于 Bilibili 视频/番剧和小黑盒帖子页面的 Chrome 扩展：在当前浏览器页面本地隐藏 B 站低等级评论，以及用户名或评论内容命中自定义关键词的评论/回复。
+一款支持 Chrome、Microsoft Edge 和 macOS Safari 的扩展，用于在 Bilibili 视频/番剧和小黑盒帖子页面本地隐藏低等级或命中自定义关键词的评论/回复。
 
 > 过滤只影响你自己的页面显示，不会删除评论、屏蔽账号、提交举报或修改 B 站数据。
 
@@ -20,7 +20,7 @@
 - 适配 B 站新版 Shadow DOM 评论组件，并兼容部分旧版评论区结构。
 - 适配小黑盒帖子评论及回复；可单独开启“隐藏小黑盒无等级标识评论”，没有 LV 等级标识的评论/回复会被隐藏，带有 LV8 等标识的仍会显示。
 - 页面右下角显示运行状态、检查数量和隐藏数量。
-- 关键词及开关设置保存在 Chrome Sync Storage 中。
+- 关键词及开关设置通过浏览器扩展存储保存；Safari 中不会跨设备同步。
 
 ## 默认过滤规则
 
@@ -48,6 +48,33 @@
 4. 点击**加载已解压的扩展程序**。
 5. 选择解压后的项目根目录，也就是包含 `manifest.json` 的文件夹。
 6. 打开或刷新 Bilibili 视频/番剧页面，或小黑盒帖子页面（例如 `/app/bbs/link/194148558`）。首次访问小黑盒页面时，Chrome 可能会要求允许扩展访问 `www.xiaoheihe.cn`。
+
+### Microsoft Edge
+
+Edge 使用与 Chrome 相同的扩展源码，无需单独修改过滤代码：
+
+1. 在 Edge 地址栏打开 `edge://extensions`。
+2. 打开**开发人员模式**。
+3. 点击**加载解压缩的扩展**，选择包含 `manifest.json` 的项目文件夹。
+4. 打开或刷新 Bilibili 或小黑盒帖子页面；如果 Edge 询问网站访问权限，请允许扩展访问对应站点。
+
+Microsoft 说明 Edge 可直接使用兼容的 Chrome 扩展 API；本项目使用的 `storage` 与内容脚本 API 可沿用同一份源码。参见[Edge 官方移植说明](https://learn.microsoft.com/microsoft-edge/extensions/developer-guide/port-chrome-extension)和[本地加载说明](https://learn.microsoft.com/microsoft-edge/extensions-chromium/getting-started/extension-sideloading)。
+
+### Safari（macOS）
+
+Safari 15.4 及以上支持 Manifest V3。本项目使用的 `chrome.*` 扩展 API 在 Safari Web Extension 中可用；Safari 的 `storage.sync` 不提供跨设备同步，设置保存在本机。[Apple 兼容性说明](https://developer.apple.com/documentation/safariservices/assessing-your-safari-web-extension-s-browser-compatibility)
+
+开发时可临时加载源码文件夹：在 Safari 设置的“高级”中启用网页开发者功能，然后进入“开发者”设置，选择**添加临时扩展**并选中项目文件夹。Safari 可能要求先允许未签名扩展。临时扩展会在退出 Safari 或 24 小时后移除。[Apple 临时安装说明](https://developer.apple.com/documentation/safariservices/running-your-safari-web-extension)
+
+如需生成可由 Safari app 安装的版本，需要在 Mac 上使用 Xcode 的 Safari Web Extension Packager：
+
+```sh
+xcrun safari-web-extension-packager /path/to/fatfish-disaster-blocker \
+  --project-location /path/to/FishDisasterBlockerSafari \
+  --app-name "Fish Disaster Blocker" --swift --copy-resources
+```
+
+随后在 Xcode 中构建并运行生成的 macOS app，再到 Safari 设置中启用扩展。[Apple 打包说明](https://developer.apple.com/documentation/safariservices/packaging-a-web-extension-for-safari)。该步骤需要 macOS 和 Xcode；Windows 下无法生成 Safari app。
 
 ### 方式二：从本地 CRX 安装（按系统区分）
 
@@ -98,7 +125,7 @@
 
 ## 本地开发
 
-本扩展使用 Chrome Manifest V3，没有构建步骤和第三方运行时依赖。修改 `content.js`、`content.css` 或弹窗文件后，在 `chrome://extensions` 重新加载扩展，再刷新 Bilibili 或小黑盒页面。
+本扩展使用 Manifest V3，没有构建步骤和第三方运行时依赖。修改 `content.js`、`content.css` 或弹窗文件后，在当前浏览器的扩展管理页重新加载扩展，再刷新 Bilibili 或小黑盒页面。Safari 需按上文用 Xcode 重建 macOS app。
 
 目录结构：
 

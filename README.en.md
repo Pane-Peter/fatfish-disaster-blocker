@@ -2,7 +2,7 @@
 
 [简体中文](README.md) | [English](README.en.md)
 
-A Chrome extension that locally hides low-level Bilibili comments and filters comments or replies on Bilibili and Xiaoheihe when their usernames or text contain selected keywords.
+A browser extension for Chrome, Microsoft Edge, and macOS Safari that locally hides low-level Bilibili comments and comments or replies on Bilibili and Xiaoheihe when their usernames or text match configured keywords.
 
 > Filtering only changes what is displayed in your browser. It does not delete comments, block accounts, submit reports, or modify Bilibili data.
 
@@ -20,7 +20,7 @@ A Chrome extension that locally hides low-level Bilibili comments and filters co
 - Support Bilibili's newer Shadow DOM comment components and some legacy comment layouts.
 - Support comments and replies on Xiaoheihe post pages. A separate toggle hides items with no level badge; comments with a badge such as `LV8` or the author badge remain visible.
 - Show filtering status, number of checked comments, and number hidden in a page indicator.
-- Save settings using Chrome Sync Storage.
+- Save settings using browser extension storage. Safari does not sync settings across devices.
 
 ## Default filters
 
@@ -48,6 +48,33 @@ Matching uses substring comparison and ignores English letter case. For example,
 4. Select **Load unpacked**.
 5. Choose the project root folder that contains `manifest.json`.
 6. Open or refresh a Bilibili video/anime page or a Xiaoheihe post page such as `/app/bbs/link/194148558`. Chrome may ask you to allow access to `www.xiaoheihe.cn` the first time.
+
+### Microsoft Edge
+
+Edge can use the same extension source as Chrome; no separate filtering code is needed:
+
+1. Open `edge://extensions`.
+2. Turn on **Developer mode**.
+3. Select **Load unpacked** and choose the project folder containing `manifest.json`.
+4. Open or refresh a Bilibili or Xiaoheihe post page. Allow access to the requested site if Edge asks.
+
+Microsoft documents that compatible Chrome extension APIs can be used in Edge. See [Edge's porting guide](https://learn.microsoft.com/microsoft-edge/extensions/developer-guide/port-chrome-extension) and [local sideloading instructions](https://learn.microsoft.com/microsoft-edge/extensions-chromium/getting-started/extension-sideloading).
+
+### Safari (macOS)
+
+Safari 15.4 and later supports Manifest V3. The `chrome.*` extension APIs used by this project are available in Safari Web Extensions. Safari implements `storage.sync` without cross-device syncing, so settings remain local. See [Apple's compatibility guide](https://developer.apple.com/documentation/safariservices/assessing-your-safari-web-extension-s-browser-compatibility).
+
+For temporary development installation, enable web developer features in Safari Settings > Advanced, then open the Developer settings and choose **Add Temporary Extension**. Select the project folder; Safari may ask you to allow unsigned extensions. Safari removes temporary extensions when it quits or after 24 hours. See [Apple's temporary installation guide](https://developer.apple.com/documentation/safariservices/running-your-safari-web-extension).
+
+To create a Safari app that installs the extension, use Xcode's Safari Web Extension Packager on a Mac:
+
+```sh
+xcrun safari-web-extension-packager /path/to/fatfish-disaster-blocker \
+  --project-location /path/to/FishDisasterBlockerSafari \
+  --app-name "Fish Disaster Blocker" --swift --copy-resources
+```
+
+Then build and run the generated macOS app in Xcode and enable the extension in Safari Settings. See [Apple's packaging guide](https://developer.apple.com/documentation/safariservices/packaging-a-web-extension-for-safari). This step requires macOS and Xcode; a Safari app cannot be generated on Windows.
 
 ### Option 2: Install a local CRX package (platform-dependent)
 
@@ -93,7 +120,7 @@ On the first update after a default-keyword list change, new defaults are merged
 
 ## Development and deployment
 
-This is a Chrome Manifest V3 extension with no build step or third-party runtime dependencies. After editing `content.js`, `content.css`, or popup files, reload the extension at `chrome://extensions` and refresh the Bilibili or Xiaoheihe page.
+This is a Manifest V3 extension with no build step or third-party runtime dependencies. After editing `content.js`, `content.css`, or popup files, reload the extension in the current browser's extensions page and refresh the Bilibili or Xiaoheihe page. Safari requires rebuilding the macOS app in Xcode as described above.
 
 Project layout:
 
