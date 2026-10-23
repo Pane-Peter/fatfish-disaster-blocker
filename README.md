@@ -9,8 +9,6 @@
 - [Pane-Peter](https://github.com/Pane-Peter)（项目维护者）
 - OpenAI Codex（AI 协助代码实现、调试与文档编写）
 
-[查看 GitHub Contributors 页面](https://github.com/Pane-Peter/fatfish-disaster-blocker/graphs/contributors)
-
 ## 功能
 
 - 隐藏可识别等级低于 3 级的评论和回复。
