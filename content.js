@@ -4,6 +4,7 @@
   const DEFAULTS = {
     enabled: true,
     lowLevel: true,
+    xhhNoLevel: true,
     keywords: true,
     terms: [
       "本鱼", "本肥鱼", "肥鱼", "大肥鱼", "小肥鱼", "肥肥鱼",
@@ -22,9 +23,13 @@
   const LEGACY_CARDS = ".reply-item, .root-reply-container, .sub-reply-item, .reply-item-wrap, .root-reply, .sub-reply";
   const LEGACY_BODY = ".reply-content, .reply-content-container, .content-wrp, .text-con, .reply-con";
   const LEVEL_BADGES = "[class*='level'], [class*='等级'], [aria-label*='LV'], [title*='LV']";
+  // Xiaoheihe link-page comment cards (top-level comments and their replies).
+  const XHH_COMMENTS = ".link-comment__list .link-comment__comment-item";
+  const XHH_REPLIES = ".link-comment__list .link-comment__comment-item .comment-children-item";
 
   const observedRoots = new WeakSet();
   const originalDisplays = new WeakMap();
+  const xhhOriginalDisplays = new WeakMap();
   let settings = { ...DEFAULTS };
   let observer;
   let queued = new Map();
@@ -177,6 +182,53 @@
     return Boolean(reason);
   }
 
+  function findXhhItem(node) {
+    const element = isElement(node) ? node : node?.parentElement;
+    if (!element) return null;
+    return element.matches(XHH_REPLIES) ? element : element.closest?.(XHH_REPLIES)
+      || (element.matches(XHH_COMMENTS) ? element : element.closest?.(XHH_COMMENTS)) || null;
+  }
+
+  function processXhh(item) {
+    const isReply = item.matches(XHH_REPLIES);
+    const usernameSelector = isReply ? ".children-item__comment-creator" : ".info-box__username";
+    const bodySelector = isReply ? ".children-item__comment-content" : ".comment-item__content";
+    const usernameNode = item.querySelector(usernameSelector);
+    const username = textOf(usernameNode);
+    const body = textOf(item.querySelector(bodySelector));
+    const searchable = `${username} ${body}`.toLocaleLowerCase();
+    const keywordHit = settings.keywords && terms().some(term => searchable.includes(term.toLocaleLowerCase()));
+    const levelScopes = [usernameNode?.parentElement, usernameNode?.parentElement?.parentElement].filter(Boolean);
+    const levelElements = new Set();
+    for (const scope of levelScopes) {
+      scope.querySelectorAll?.("[class*='level'], [class*='Level'], [class*='lv'], [class*='Lv'], [class*='等级'], [aria-label*='LV'], [title*='LV'], span, i, b, em, small, img")
+        .forEach(element => levelElements.add(element));
+    }
+    const hasLevelBadge = [...levelElements].some(element => {
+      const label = `${textOf(element)} ${element.getAttribute("aria-label") || ""} ${element.getAttribute("title") || ""} ${element.getAttribute("alt") || ""} ${element.getAttribute("class") || ""}`;
+      return /\b(?:lv\.?\s*\d+|level\s*\d+|\d+\s*级)\b/i.test(label);
+    });
+    const noLevelHit = settings.xhhNoLevel && Boolean(usernameNode) && !hasLevelBadge;
+    const reason = settings.enabled && (keywordHit || noLevelHit)
+      ? keywordHit ? "keyword" : "no-level" : "";
+
+    if (!xhhOriginalDisplays.has(item)) {
+      xhhOriginalDisplays.set(item, {
+        value: item.style.getPropertyValue("display"),
+        priority: item.style.getPropertyPriority("display"),
+      });
+    }
+    item.classList.toggle("xhh-clean-hidden", Boolean(reason));
+    if (reason) item.dataset.biliCommentFilterReason = reason;
+    else delete item.dataset.biliCommentFilterReason;
+    if (!reason) {
+      const original = xhhOriginalDisplays.get(item);
+      if (original.value) item.style.setProperty("display", original.value, original.priority);
+      else item.style.removeProperty("display");
+    }
+    return Boolean(reason);
+  }
+
   function updateStatus(checked, hidden) {
     if (!statusNode || !statusNode.isConnected) {
       statusNode = document.createElement("div");
@@ -199,7 +251,8 @@
       queued = new Map();
       let hidden = 0;
       for (const [item, kind] of batch) {
-        hidden += Number(kind === "renderer" ? processRenderer(item) : processLegacy(item));
+        hidden += Number(kind === "renderer" ? processRenderer(item)
+          : kind === "legacy" ? processLegacy(item) : processXhh(item));
       }
       updateStatus(batch.size, hidden);
     }, 80);
@@ -219,6 +272,8 @@
       if (renderer) enqueue(renderer, "renderer");
       const legacy = findLegacyCard(root);
       if (legacy) enqueue(legacy, "legacy");
+      const xhhItem = findXhhItem(root);
+      if (xhhItem) enqueue(xhhItem, "xhh");
       if (root.matches?.(COMMENT_RENDERERS)) enqueue(root, "renderer");
       if (root.shadowRoot && root.matches?.(SHADOW_HOSTS)) {
         observeRoot(root.shadowRoot);
@@ -227,6 +282,7 @@
     }
 
     root.querySelectorAll?.(LEGACY_CARDS).forEach(card => enqueue(card, "legacy"));
+    root.querySelectorAll?.(`${XHH_COMMENTS}, ${XHH_REPLIES}`).forEach(item => enqueue(item, "xhh"));
     root.querySelectorAll?.(SHADOW_HOSTS).forEach(host => {
       if (host.matches(COMMENT_RENDERERS)) enqueue(host, "renderer");
       if (host.shadowRoot) {
@@ -243,6 +299,8 @@
         if (renderer) enqueue(renderer, "renderer");
         const legacy = findLegacyCard(record.target);
         if (legacy) enqueue(legacy, "legacy");
+        const xhhItem = findXhhItem(record.target);
+        if (xhhItem) enqueue(xhhItem, "xhh");
         continue;
       }
       for (const node of record.addedNodes) {
@@ -250,6 +308,8 @@
         if (renderer) enqueue(renderer, "renderer");
         const legacy = findLegacyCard(node);
         if (legacy) enqueue(legacy, "legacy");
+        const xhhItem = findXhhItem(node);
+        if (xhhItem) enqueue(xhhItem, "xhh");
         if (isElement(node)) scan(node);
       }
     }

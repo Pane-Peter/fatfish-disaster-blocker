@@ -1,6 +1,7 @@
 const defaults = {
   enabled: true,
   lowLevel: true,
+  xhhNoLevel: true,
   keywords: true,
   terms: [
     "本鱼", "本肥鱼", "肥鱼", "大肥鱼", "小肥鱼", "肥肥鱼",
@@ -11,7 +12,7 @@ const defaults = {
   ],
 };
 const termsVersion = 2;
-const ids = ["enabled", "lowLevel", "keywords"];
+const ids = ["enabled", "lowLevel", "xhhNoLevel", "keywords"];
 const terms = document.getElementById("terms");
 const status = document.getElementById("status");
 let timer;

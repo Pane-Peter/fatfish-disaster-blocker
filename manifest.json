@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
   "name": "鱼灾屏蔽助手",
-  "version": "2.2.0",
-  "description": "隐藏低等级和包含指定关键词的 B 站评论回复。",
+  "version": "2.3.0",
+  "description": "过滤 B 站和小黑盒评论中的低等级或指定关键词内容。",
   "permissions": ["storage"],
-  "host_permissions": ["https://www.bilibili.com/*"],
+  "host_permissions": ["https://www.bilibili.com/*", "https://www.xiaoheihe.cn/*"],
   "content_scripts": [
     {
-      "matches": ["https://www.bilibili.com/video/*", "https://www.bilibili.com/bangumi/*"],
+      "matches": ["https://www.bilibili.com/video/*", "https://www.bilibili.com/bangumi/*", "https://www.xiaoheihe.cn/app/bbs/link/*"],
       "js": ["content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
