@@ -17,7 +17,8 @@ A browser extension for Chrome, Microsoft Edge, and macOS Safari that locally hi
 - Match keywords against usernames and comment text, then hide the matching item.
 - Toggle all filtering, the Bilibili level rule, the Xiaoheihe no-level rule, and keyword filtering separately in the popup.
 - Edit the keyword list in the popup. Separate terms with commas or new lines.
-- Support Bilibili's newer Shadow DOM comment components and some legacy comment layouts.
+- Run Bilibili and Xiaoheihe through fully separate page scripts and level-recognition rules, so a DOM change on one site does not affect the other.
+- Read Bilibili's newer Shadow DOM level badge from the `#user-level img` URL in `bili-comment-user-info` (for example, `level_3.svg`), with fallbacks for older text/class badges and legacy comment layouts.
 - Support comments and replies on Xiaoheihe post pages. A separate toggle hides items with no level badge; comments with a badge such as `LV8` or the author badge remain visible.
 - Show filtering status, number of checked comments, and number hidden in a page indicator.
 - Save settings using browser extension storage. Safari does not sync settings across devices.
@@ -26,7 +27,7 @@ A browser extension for Chrome, Microsoft Edge, and macOS Safari that locally hi
 
 Filters are enabled by default:
 
-1. **Bilibili level filter:** hides comments with a recognized user level below 3. A comment is not hidden by this rule when its level cannot be identified.
+1. **Bilibili level filter:** uses Bilibili-specific logic to read the level icon in the newer Shadow DOM user-info component (for example, `level_3.svg`) and hides comments with a recognized level below 3. A comment is not hidden by this rule when its level cannot be identified.
 2. **Xiaoheihe no-level filter:** enabled by default. Hides comments or replies with no level badge. Items with badges such as `LV8` or the author badge remain visible. Toggle this rule separately in the popup.
 3. **Keyword filter:** hides a comment on Bilibili or Xiaoheihe when its username or text contains any configured keyword.
 
@@ -89,7 +90,7 @@ Then build and run the generated macOS app in Xcode and enable the extension in 
      ```json
      {
        "external_crx": "/opt/google/chrome/extensions/fish-disaster-blocker.crx",
-       "external_version": "2.3.1"
+       "external_version": "2.3.2"
      }
      ```
 
@@ -120,13 +121,14 @@ On the first update after a default-keyword list change, new defaults are merged
 
 ## Development and deployment
 
-This is a Manifest V3 extension with no build step or third-party runtime dependencies. After editing `content.js`, `content.css`, or popup files, reload the extension in the current browser's extensions page and refresh the Bilibili or Xiaoheihe page. Safari requires rebuilding the macOS app in Xcode as described above.
+This is a Manifest V3 extension with no build step or third-party runtime dependencies. Bilibili uses `content.js`; Xiaoheihe uses `xiaoheihe.js`. Their filtering logic is independent. After editing either script, `content.css`, or popup files, reload the extension in the current browser's extensions page and refresh the relevant page. Safari requires rebuilding the macOS app in Xcode as described above.
 
 Project layout:
 
 ```text
 manifest.json       Extension manifest, permissions, URL matches, and icons
-content.js          Comment scanning and filtering logic
+xiaoheihe.js        Xiaoheihe-only comment scanning, no-level detection, and keyword filtering
+content.js          Bilibili-only comment scanning, level-icon detection, and keyword filtering
 content.css         Hide rules and on-page status indicator
 popup.html          Toolbar popup markup
 popup.js            Settings and keyword editing/saving
@@ -143,7 +145,7 @@ LICENSE             MIT License
 - Confirm that the extension and the relevant rule are enabled in the popup.
 - After updating, reload the extension at `chrome://extensions` and refresh the Bilibili page.
 - Check the status indicator. The extension can only process comment components it recognizes; Bilibili layout changes may require an adapter update.
-- When a user's level cannot be identified, the level rule will not hide that comment. Add a keyword if you want to filter it by text instead.
+- Bilibili reads the level SVG URL in the newer user-info component. When a level cannot be identified, the level rule will not hide that comment. Add a keyword if you want to filter it by text instead.
 
 **A Xiaoheihe comment was not filtered**
 

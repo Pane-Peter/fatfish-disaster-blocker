@@ -1,14 +1,20 @@
 {
   "manifest_version": 3,
   "name": "鱼灾屏蔽助手",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "过滤 B 站和小黑盒评论中的低等级或指定关键词内容。",
   "permissions": ["storage"],
   "host_permissions": ["https://www.bilibili.com/*", "https://www.xiaoheihe.cn/*"],
   "content_scripts": [
     {
-      "matches": ["https://www.bilibili.com/video/*", "https://www.bilibili.com/bangumi/*", "https://www.xiaoheihe.cn/app/bbs/link/*"],
+      "matches": ["https://www.bilibili.com/video/*", "https://www.bilibili.com/bangumi/*"],
       "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.xiaoheihe.cn/app/bbs/link/*"],
+      "js": ["xiaoheihe.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }

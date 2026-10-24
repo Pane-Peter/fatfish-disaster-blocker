@@ -17,7 +17,8 @@
 - 检查评论用户名、正文和组件显示文本，命中任一关键词时隐藏对应评论/回复。
 - 在扩展弹窗中分别启停总过滤、B 站等级规则、小黑盒无等级规则和关键词规则。
 - 在弹窗中编辑关键词，支持中文逗号、英文逗号和换行分隔。
-- 适配 B 站新版 Shadow DOM 评论组件，并兼容部分旧版评论区结构。
+- B 站和小黑盒使用完全独立的页面脚本与等级识别规则，避免一个站点的 DOM 变化影响另一个站点。
+- B 站新版评论等级优先从 `bili-comment-user-info` 的 `#user-level img` 图片地址读取（如 `level_3.svg`），并兼容旧版文字/类名标识和旧版评论区结构。
 - 适配小黑盒帖子评论及回复；可单独开启“隐藏小黑盒无等级标识评论”，没有 LV 等级标识的评论/回复会被隐藏，带有 LV8 等标识的仍会显示。
 - 页面右下角显示运行状态、检查数量和隐藏数量。
 - 关键词及开关设置通过浏览器扩展存储保存；Safari 中不会跨设备同步。
@@ -26,7 +27,7 @@
 
 默认开启以下过滤：
 
-1. **B 站等级过滤：** 隐藏能识别且等级小于 3 的 B 站评论。无法识别等级时，不会仅因为等级缺失而隐藏。
+1. **B 站等级过滤：** 使用 B 站专用识别逻辑，读取新版 Shadow DOM 用户信息中的等级图标（例如 `level_3.svg`），隐藏能识别且等级小于 3 的评论。无法识别等级时，不会仅因为等级缺失而隐藏。
 2. **小黑盒无等级过滤：** 默认开启。隐藏没有等级标识的评论或回复；识别到 `LV8` 等等级标识或“作者”标识时保留。可以在弹窗单独关闭此规则。
 3. **关键词过滤：** B 站和小黑盒的评论用户名或内容包含任一默认关键词时隐藏。
 
@@ -89,7 +90,7 @@ xcrun safari-web-extension-packager /path/to/fatfish-disaster-blocker \
      ```json
      {
        "external_crx": "/opt/google/chrome/extensions/fish-disaster-blocker.crx",
-       "external_version": "2.3.1"
+     "external_version": "2.3.2"
      }
      ```
 
@@ -125,13 +126,14 @@ xcrun safari-web-extension-packager /path/to/fatfish-disaster-blocker \
 
 ## 本地开发
 
-本扩展使用 Manifest V3，没有构建步骤和第三方运行时依赖。修改 `content.js`、`content.css` 或弹窗文件后，在当前浏览器的扩展管理页重新加载扩展，再刷新 Bilibili 或小黑盒页面。Safari 需按上文用 Xcode 重建 macOS app。
+本扩展使用 Manifest V3，没有构建步骤和第三方运行时依赖。Bilibili 使用 `content.js`，小黑盒使用 `xiaoheihe.js`；两站过滤逻辑互相独立。修改这些脚本、`content.css` 或弹窗文件后，在当前浏览器的扩展管理页重新加载扩展，再刷新对应页面。Safari 需按上文用 Xcode 重建 macOS app。
 
 目录结构：
 
 ```text
 manifest.json       扩展清单、权限、页面匹配规则和图标声明
-content.js          评论扫描、等级/关键词判断、动态更新处理
+content.js          B 站专用评论扫描、等级图标识别和关键词过滤
+xiaoheihe.js        小黑盒专用评论扫描、无等级标识识别和关键词过滤
 content.css         隐藏样式和页面状态提示
 popup.html          工具栏弹窗结构
 popup.js            设置加载、关键词编辑和自动保存
@@ -147,7 +149,7 @@ LICENSE             MIT License
 
 - 确认扩展已启用，且弹窗中的对应过滤规则已勾选。
 - 更新扩展后，在 `chrome://extensions` 重新加载，再刷新 Bilibili 页面。
-- 检查页面右下角状态提示。扩展只处理它能识别的评论组件；B 站页面结构改变时可能需要更新适配。
+- 检查页面右下角状态提示。B 站等级读取新版用户信息组件里的等级 SVG 地址；无法识别的等级不会被等级规则隐藏。
 - 等级信息识别不到时，不会按等级规则隐藏；可以使用关键词规则补充过滤。
 
 **小黑盒评论没有被过滤？**
